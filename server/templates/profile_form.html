@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+Discover — add new profile
+</title>
+{% autoescape false %}
+{{ includes }}
+{% endautoescape %}
+<script>
+$(function() {
+	$( "#tabs" ).tabs();
+});
+
+function check_profile_form() {
+	var msg = "";
+	if ($('#template_name').val() == "") msg = msg + "Template name cannot be empty!<br />"
+	if ($('#installer_url').val() == "") msg = msg + "Installer url cannot be empty!<br />"
+	if ($('#network_settings').val() == "") msg = msg + "Network settings cannot be empty!<br />"
+	if ($('#disk_settings').val() == "") msg = msg + "Disk partitioning cannot be empty!<br />"
+	if ($('#packages').val() == "") msg = msg + "Packages list cannot be empty!<br />"
+	if (msg == "")
+		return true;
+	else {
+		$('#msg').html(msg);
+	}
+	return false;
+}
+
+</script>
+</head>
+<body>
+{% autoescape false %}
+{{ header }}
+{% endautoescape %}
+<div id="msg"></div>
+<form id="profile_params" method="post" action="/discover/api/{{ action }}_profile" onsubmit="return check_profile_form();">
+<div id="tabs">
+<ul>
+<li>
+<a href="#tabs-params">Template parameters</a>
+</li>
+<li><a href="#tabs-network">Network settings</a>
+</li>
+<li><a href="#tabs-disk">Disk partitions and arrays</a>
+</li>
+<li><a href="#tabs-repo">Repositories</a>
+</li>
+<li><a href="#tabs-pkg">Groups and packages</a>
+</li>
+<li><a href="#tabs-scripts">Pre and post scripts</a>
+</li>
+</ul>
+<div id="tabs-params">
+Template name<br />
+<input style="width: 600px" id="template_name" name="template_name" value="{{ name }}" /><br /><br />
+Installer URL<br />
+<input style="width: 600px" id="installer_url" name="installer_url" value="{{ installer_url }}" />
+</div>
+<div id="tabs-network">
+{% autoescape false %}
+<textarea cols="80" rows="15" id="network_settings" name="network_settings">{{ network_settings }}</textarea>
+{% endautoescape %}
+</div>
+<div id="tabs-disk">
+{% autoescape false %}
+<textarea cols="80" rows="15" id="disk_settings" name="disk_settings">{{ disk_settings }}</textarea>
+{% endautoescape %}
+</div>
+<div id="tabs-repo">
+{% for repo in repos %}
+<input type="checkbox" name="repos" checked="{% if repo.active %}checked{% endif %}" value="{{ repo.name }}">&nbsp;[{{ repo.name }}]&nbsp;{{ repo.url }}<br />
+{% endfor %}
+</div>
+<div id="tabs-pkg">
+{% autoescape false %}
+<textarea cols="80" rows="15" id="packages" name="packages">{{ packages }}</textarea>
+{% endautoescape %}
+</div>
+<div id="tabs-scripts">
+{% autoescape false %}
+<b>Preinstall</b><br />
+<textarea cols="80" rows="15" id="preinstall" name="preinstall">{{ preinstall }}</textarea><br /><br />
+<b>Postinstall</b><br />
+<textarea cols="80" rows="15" id="postinstall" name="postinstall">{{ postinstall }}</textarea>
+{% endautoescape %}
+</div>
+</div>
+<br /><input type="submit" value="Add profile" />
+</form>
+{% autoescape false %}
+{{ footer }}
+{% endautoescape %}
+</body>
+</html>

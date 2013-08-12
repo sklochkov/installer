@@ -1,0 +1,15 @@
+<uwsgi>
+  <socket>/var/run/installer/uwsgi.sock</socket>
+  <plugin>python</plugin>
+  <listen>1000</listen>
+  <master/>
+  <vacuum/>
+  <processes>4</processes>
+  <pythonpath>/work/installer/app/</pythonpath>
+  <module>installer_server_app</module>
+  <callable>app</callable>
+  <logto>/var/log/installer/uwsgi.log</logto>
+  <log-4xx/>
+  <log-5xx/>
+</uwsgi>
+

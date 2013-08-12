@@ -1,0 +1,20 @@
+#hdr {
+	width: 100%;
+	text-align: center;
+	color: #1C94C4;
+	margin: 0 0 20px 0;
+}
+
+#ftr {
+	margin: 20px 0 0 0;
+        width: 100%;
+        text-align: center;
+        color: #1C94C4;
+	text-size: 10pt;
+}
+
+#msg {
+	color: #DD0000;
+	font-size: 14pt;
+	font-weight: bold;
+}
