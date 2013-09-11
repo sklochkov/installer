@@ -40,4 +40,4 @@ def profiles_list():
 
 @app.route('/discover/profiles/add', methods=['POST'])
 def add_profile():
-	
+	return "Not implemented yet"	

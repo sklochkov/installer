@@ -18,3 +18,20 @@
 	font-size: 14pt;
 	font-weight: bold;
 }
+
+#lst {
+	position: relative;
+	margin: auto;
+	width: 500px;
+	min-height: 400px;
+}
+
+#lst table {
+	background-color: #EB8F00;
+	border-radius: 5px;
+}
+
+#lst * td {
+	border-radius: 3px;
+	background-color: #FFFFFF;
+}

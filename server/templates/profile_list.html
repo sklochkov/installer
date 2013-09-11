@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+Add new profile
+</title>
+<link rel="stylesheet" href="jquery-ui.css" />
+<link rel="stylesheet" href="custom.css" />
+<script src="jquery.js"></script>
+<script src="jquery-ui.js"></script>
+<script>
+
+function edit_profile(id) {
+	document.location = "/discover/add_profile?id=" + id;
+}
+
+function clone_profile(id) {
+        document.location = "/discover/clone_profile?id=" + id;
+}
+
+function del_profile(id) {
+	if (window.confirm("Are you sure?")) document.location = "/discover/del_profile?id=" + id;
+}
+
+</script>
+</head>
+<body>
+{% autoescape false %}
+{{ header }}
+{% endautoescape %}
+<div id="msg"></div>
+<div id="lst">
+<table width="500" cellpadding=2 cellspacing=5>
+
+{% for profile in in profiles %}
+<!-- ROW -->
+<tr>
+<td>{{ profile.name }}</td>
+<td><input type="button" value="edit" onclick="edit_profile({{ profile.id }})" />&nbsp;<input type="button" value="clone" onclick="clone_profile({{ profile.id }})" />&nbsp;<input type="button" value="del" onclick="del_profile({{ profile.id }})" /></td>
+</tr>
+<!-- END ROW -->
+{{ %endfor }}
+
+</table>
+</div>
+{% autoescape false %}
+{{ footer }}
+{% endautoescape %}
+</body>
+</html>

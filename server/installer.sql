@@ -24,7 +24,8 @@ CREATE TABLE `profiles` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
 	`name` varchar(500),
 	`status` int(11) NOT NULL DEFAULT 0,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	UNIQUE KEY (`name`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ENGINE innodb;
 
 CREATE TABLE `profile_parameters` (
@@ -32,7 +33,8 @@ CREATE TABLE `profile_parameters` (
 	`profile_id` int(11) NOT NULL,
         `name` varchar(500),
 	`value` text,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	UNIQUE KEY (`profile_id`, `name`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ENGINE innodb;
 
 CREATE TABLE `server_statuses` (
@@ -59,6 +61,14 @@ CREATE TABLE `repositories` (
 	`url` varchar(500),
         PRIMARY KEY (`id`),
 	UNIQUE KEY (`name`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ENGINE innodb;
+
+CREATE TABLE `profiles_repositories` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`profile_id` int(11) NOT NULL,
+	`repo_id` int(11) NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE KEY (`profile_id`, `repo_id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ENGINE innodb;
 
 INSERT INTO `server_statuses` (`id`, `name`) VALUES 

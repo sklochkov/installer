@@ -14,7 +14,7 @@ $(function() {
 
 function check_profile_form() {
 	var msg = "";
-	if ($('#template_name').val() == "") msg = msg + "Template name cannot be empty!<br />"
+	if ($('#profile_name').val() == "") msg = msg + "Profile name cannot be empty!<br />"
 	if ($('#installer_url').val() == "") msg = msg + "Installer url cannot be empty!<br />"
 	if ($('#network_settings').val() == "") msg = msg + "Network settings cannot be empty!<br />"
 	if ($('#disk_settings').val() == "") msg = msg + "Disk partitioning cannot be empty!<br />"
@@ -38,7 +38,7 @@ function check_profile_form() {
 <div id="tabs">
 <ul>
 <li>
-<a href="#tabs-params">Template parameters</a>
+<a href="#tabs-params">Profile parameters</a>
 </li>
 <li><a href="#tabs-network">Network settings</a>
 </li>
@@ -52,8 +52,8 @@ function check_profile_form() {
 </li>
 </ul>
 <div id="tabs-params">
-Template name<br />
-<input style="width: 600px" id="template_name" name="template_name" value="{{ name }}" /><br /><br />
+Profile name<br />
+<input style="width: 600px" id="profile_name" name="profile_name" value="{{ name }}" /><br /><br />
 Installer URL<br />
 <input style="width: 600px" id="installer_url" name="installer_url" value="{{ installer_url }}" />
 </div>
@@ -69,7 +69,7 @@ Installer URL<br />
 </div>
 <div id="tabs-repo">
 {% for repo in repos %}
-<input type="checkbox" name="repos" checked="{% if repo.active %}checked{% endif %}" value="{{ repo.name }}">&nbsp;[{{ repo.name }}]&nbsp;{{ repo.url }}<br />
+<input type="checkbox" name="repos" checked="{% if repo.active %}checked{% endif %}" value="{{ repo.id }}">&nbsp;[{{ repo.name }}]&nbsp;{{ repo.url }}<br />
 {% endfor %}
 </div>
 <div id="tabs-pkg">
