@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+Installer configuration
+</title>
+<!--link rel="stylesheet" href="jquery-ui.css" />
+<link rel="stylesheet" href="custom.css" />
+<script src="jquery.js"></script>
+<script src="jquery-ui.js"></script-->
+{% autoescape false %}
+{{ includes }}
+{% endautoescape %}
+
+<script>
+$(function() {
+        $( "#tabs" ).tabs();
+});
+
+function edit_profile(name) {
+	return true;
+}
+
+function clone_profile(name) {
+        return true;
+}
+
+function delete_profile(name) {
+        return true;
+}
+
+function edit_repo(id) {
+	return true;
+}
+
+function clone_repo(id) {
+	return true;
+}
+
+function delete_repo(id) {
+	return true;
+}
+
+</script>
+</head>
+<body>
+{% autoescape false %}
+{{ header }}
+{% endautoescape %}
+<div id="menu">
+
+</div>
+<div id="msg"></div>
+<div id="lst">
+<div id="tabs">
+
+<ul>
+<li>
+<a href="#profiles">Profiles</a>
+</li>
+<li><a href="#repos">Repositories</a>
+</li>
+</li>
+</ul>
+<div id="profiles">
+<div id="add-profile">
+<input type="button" value="Add new profile" />
+</div>
+<table width="850" cellpadding=2 cellspacing=5>
+<!-- ROW -->
+
+{% for profile in profiles %}
+<tr>
+<td width='75%'>{{ profile.name }}</td>
+<td width="25%"><input type="button" value="edit"  onclick="edit_profile('{{ profile.name }}');"  />&nbsp;<input type="button" value="clone" onclick="clone_profile('{{ profile.name }}');" />&nbsp;<input type="button" value="del"  onclick="delete_profile('{{ profile.name }}');"  /></td>
+</tr>
+{% endfor %}
+
+</table>
+</div>
+<div id="repos">
+<div id="add-profile">
+<input type="button" value="Add new repository" />
+</div>
+<table width="850" cellpadding=2 cellspacing=5>
+
+{% for repo in repos %}
+
+<tr>
+<td width='20%'>repo.name</td>
+<td width='55%'><a href="{{ repo.url }}">{{ repo.url }}</a></td>
+<td width="25%"><input type="button" value="edit" onclick="edit_repo('{{ repo.id }}')" />&nbsp;<input type="button" value="clone" onclick="clone_repo('{{ repo.id }}')" />&nbsp;<input type="button" value="del" onclick="delete_repo('{{ repo.id }}')" /></td>
+</tr>
+
+{% endfor %}
+
+</table>
+</div>
+</div>
+</div>
+{% autoescape false %}
+{{ footer }}
+{% endautoescape %}
+</body>
+</html>
