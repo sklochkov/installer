@@ -92,7 +92,7 @@ install -m644 templates/profile_form.html %{buildroot}/work/installer/app/templa
 install -m644 templates/kickstart.cfg %{buildroot}/work/installer/app/templates/kickstart.cfg
 install -m644 templates/configuration.html %{buildroot}/work/installer/app/templates/configuration.html 
 install -m644 templates/scripts_and_styles.html %{buildroot}/work/installer/app/templates/scripts_and_styles.html
-
+install -m644 templates/repo_add.html %{buildroot}/work/installer/app/templates/repo_add.html
 
 
 %clean
