@@ -62,26 +62,35 @@ def profiles_list():
 
 @app.route('/discover/repo_add', methods=['POST'])
 def add_repository():
-    if 'name' not in flask.request.form:
-        flask.abort(400)
-    if 'url' not in flask.request.form:
-        flask.abort(400)
-    name = flask.request.form['name']
-    url = flask.request.form['url']
-    return flask.redirect('/discover/config/')
+    try:
+        if 'repo_name' not in flask.request.form:
+            flask.abort(400)
+        if 'repo_url' not in flask.request.form:
+            flask.abort(400)
+        name = flask.request.form['name']
+        url = flask.request.form['url']
+        inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
+                                 app.cfg['mysql']['database'][0])
+        inssrv.add_repo(name, url)
+        return flask.redirect('/discover/config/')
+    except Exception, ex:
+        return traceback.format_exc()
 
 @app.route('/discover/repo_add_form', methods=['GET'])
 def repo_form():
-    id = flask.request.args.get('id')
-    name = ""
-    url = ""
-    if id:
-        inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
+    try:
+        id = flask.request.args.get('id')
+        name = ""
+        url = ""
+        if id:
+            inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
                              app.cfg['mysql']['database'][0])
-        repo = inssrv.get_repo_by_id(id)
-        name = repo['name']
-        url = repo['url']
-    incl = flask.render_template('scripts_and_styles.html')
-    hdr = flask.render_template('header.html')
-    ftr = flask.render_template('footer.html')
-    return flask.render_template('repo_add.html', includes=incl, header=hdr, footer=ftr, name=name, url=url)
+            repo = inssrv.get_repo_by_id(id)
+            name = repo['name']
+            url = repo['url']
+        incl = flask.render_template('scripts_and_styles.html')
+        hdr = flask.render_template('header.html')
+        ftr = flask.render_template('footer.html')
+        return flask.render_template('repo_add.html', includes=incl, header=hdr, footer=ftr, name=name, url=url)
+    except Exception, ex:
+        return traceback.format_exc()
