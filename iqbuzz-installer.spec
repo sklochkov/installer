@@ -99,6 +99,18 @@ install -m644 templates/repo_add.html %{buildroot}/work/installer/app/templates/
 rm -rf $RPM_BUILD_ROOT
 
 %post
+if [ $1 -eq 1 ] ; then
+	chkconfig --add installer
+	service installer start
+elif [ $1 -eq 2 ] ; then
+	service installer restart
+fi
+
+%preun
+if [ $1 -eq 0 ] ; then
+	chkconfig --del installer
+	service installer stop
+fi
 
 %files server
 %defattr(-,root,root)
