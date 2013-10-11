@@ -21,6 +21,8 @@ PROFILE_ADD_REPOSITORY_BINDINGS = """insert into `profiles_repositories` (`id`, 
 
 PROFILE_DROP_REPOSITORY_BINDINGS = """delete from `profiles_repositories` where `profile_id` = %s"""
 
+PROFILE_LIST_QUERY = """select `name`, `status` from `profiles`"""
+
 class Profile:
 	def __init__(self, name="", installer_url="", network_settings="", disk_settings="", repos=[], packages = "", preinstall="", postinstall=""):
 		self.name = name
@@ -37,17 +39,20 @@ class Profile:
 		tmpl = env.get_template('kickstart.cfg')
 		return tmpl.render(url=self.installer_url, network=self.network_settings, partitions=self.disk_settings, repos=self.repos, packages=self.packages, preinstall=self.preinstall, postinstall=self.postinstall)
 
+	def to_dict(self):
+		return {
+                        'name': self.name,
+                        'installer_url': self.installer_url,
+                        'network_settings': self.network_settings,
+                        'disk_settings': self.disk_settings,
+                        'repos': self.repos,
+                        'packages': self.packages,
+                        'preinstall': self.preinstall,
+                        'postinstall': self.postinstall
+                }
+
 	def to_json(self):
-		return json.dumps({
-			'name': self.name,
-			'installer_url': self.installer_url,
-			'network_settings': self.network_settings,
-			'disk_settings': self.disk_settings,
-			'repos': self.repos,
-			'packages': self.packages,
-			'preinstall': self.preinstall,
-			'postinstall': self.postinstall
-		})
+		return json.dumps(self.to_dict())
 	
 
 class ProfileManager:
@@ -153,12 +158,27 @@ class ProfileManager:
                         raise DatabaseException("Error while trying to commit profile: %s" % ex)
 		
 
+	#STUB
 	def update_profile(self, profile, conn):
 		pass
 
 	def get_profiles_list(self, conn):
-		pass
+		try:
+			c = conn.cursor()
+                        c.execute(PROFILE_LIST_QUERY)
+			profiles = c.fetchall()
+			c.close()
+		except Exception, ex:
+			raise DatabaseException("Error while trying to get profile list: %s" % ex)
+		result = []
+		for profile in profiles:
+			result.append({
+				'name': profile[0],
+				'status': profile[1]
+			})
+		return result
 	
+	#STUB
 	def set_profile_status(self, name, status, conn):
 		pass
 

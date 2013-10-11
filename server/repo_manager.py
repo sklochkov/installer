@@ -28,7 +28,7 @@ class RepoManager:
 		try:
 			c = conn.cursor()
 			res = c.execute(REPO_GET_ALL_QUERY)
-			repos = res.fetchall()
+			repos = c.fetchall()
 			c.close()
 		except Exception, ex:
 			c.close()
@@ -37,7 +37,7 @@ class RepoManager:
 			result.append({
 				"id": repo[0],
 				"name": repo[1],
-				"value": repo[2]
+				"url": repo[2]
 			})
 		return result	
 
@@ -45,14 +45,14 @@ class RepoManager:
 		c = conn.cursor()
 		if id != None:
 			res = c.execute(REPO_GET_BY_ID_QUERY, (id,))
-			if res.fetchone() == None:
+			if c.fetchone() == None:
 				c.close()
 				return False
 			c.close()
 			return True
 		elif name != None:
 			res = c.execute(REPO_GET_BY_NAME_QUERY, (name,))
-                        if res.fetchone() == None:
+                        if c.fetchone() == None:
                                 return False
                         return True
 		else:
@@ -123,7 +123,7 @@ class RepoManager:
 		try:
 			c = conn.cursor()
 			res = c.execute(REPO_GET_BY_ID_QUERY, (id,))
-			repo = res.fetchone()
+			repo = c.fetchone()
 		except Exception, ex:
 			c.close()
                         raise DatabaseException("Failed to get repo by id=%s: %s" % (id, ex))
@@ -137,7 +137,7 @@ class RepoManager:
                 try:
                         c = conn.cursor()
                         res = c.execute(REPO_GET_BY_NAME_QUERY, (name,))
-                        repo = res.fetchone()
+                        repo = c.fetchone()
                 except Exception, ex:
                         c.close()
                         raise DatabaseException("Failed to get repo by name=%s: %s" % (name, ex))

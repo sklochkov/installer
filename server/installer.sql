@@ -22,7 +22,7 @@ CREATE TABLE `server_parameters` (
 
 CREATE TABLE `profiles` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
-	`name` varchar(500),
+	`name` varchar(150),
 	`status` int(11) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`),
 	UNIQUE KEY (`name`)
@@ -31,7 +31,7 @@ CREATE TABLE `profiles` (
 CREATE TABLE `profile_parameters` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
 	`profile_id` int(11) NOT NULL,
-        `name` varchar(500),
+        `name` varchar(150),
 	`value` text,
 	PRIMARY KEY (`id`),
 	UNIQUE KEY (`profile_id`, `name`)
@@ -91,4 +91,7 @@ INSERT INTO `profile_parameter_types` (`id`, `name`) VALUES
 	(5, 'repos'),
 	(6, 'preinstall'),
 	(7,'postinstall');
+
+INSERT INTO `repositories` (`id`, `name`, `url`) VALUES
+    (1, 'iqbuzz-6', 'http://bz-repo.srv.iqbuzz.ru/rhel/6/x86_64/');
 

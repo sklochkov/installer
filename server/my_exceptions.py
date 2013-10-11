@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
-class DatabaseException:
+class DatabaseException(Exception):
         pass
 
-class DataException:
+class DataException(Exception):
         pass
 
-class InternalException:
+class InternalException(Exception):
 	pass
 
