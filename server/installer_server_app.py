@@ -76,7 +76,7 @@ def add_repository():
     except Exception, ex:
         return traceback.format_exc()
 
-@app.route('/discover/repo_edit')
+@app.route('/discover/repo_edit', methods=['POST'])
 def edit_repository():
     try:
         if 'repo_name' not in flask.request.form:
@@ -98,9 +98,12 @@ def edit_repository():
 @app.route('/discover/repo_delete')
 def delete_repository():
     try:
-        if 'repo_id' not in flask.request.form:
-            flask.abort(400)
-        id = flask.request.form['repo_id']
+        #if 'id' not in flask.request.form:
+        #    flask.abort(400)
+        #id = flask.request.form['id']
+        id = flask.request.args.get('id')
+        if not id:
+                flask.abort(400)
         inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
                                  app.cfg['mysql']['database'][0])
         #assert isinstance(id, object)
@@ -110,7 +113,7 @@ def delete_repository():
         return traceback.format_exc()
 
 @app.route('/discover/repo_add_form', methods=['GET'])
-def repo_form():
+def repo_add_form():
     try:
         id = flask.request.args.get('id')
         name = ""
@@ -129,7 +132,7 @@ def repo_form():
         return traceback.format_exc()
 
 @app.route('/discover/repo_edit_form', methods=['GET'])
-def repo_form():
+def repo_edit_form():
     try:
         id = flask.request.args.get('id')
         name = ""
