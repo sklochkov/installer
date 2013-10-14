@@ -59,5 +59,14 @@ class InstallerServer:
     def accept_server_info(self, info):
         raise NotImplementedError("Not implemented yet")
 
+    def update_repo(self, id, name, url):
+        r = RepoManager()
+        self.ensure_mysql_connection()
+        return r.edit_repo(id, name, url, self.mysql_conn)
+
+    def delete_repo(self, id):
+        r = RepoManager()
+        self.ensure_mysql_connection()
+        return r.delete_repo_by_id(id, self.mysql_conn)
 
 

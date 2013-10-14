@@ -30,15 +30,19 @@ function delete_profile(name) {
 }
 
 function edit_repo(id) {
-	return true;
+	document.location = "/discover/repo_edit_form?id=" + id;
 }
 
 function clone_repo(id) {
-	return true;
+	document.location = "/discover/repo_add_form?id=" + id;
 }
 
 function delete_repo(id) {
-	return true;
+    if (confirm('Really delete repo?')) document.location = "/discover/repo_delete?id=" + id;
+}
+
+function add_repo() {
+    document.location = "/discover/repo_add_form";
 }
 
 </script>

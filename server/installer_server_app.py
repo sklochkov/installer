@@ -67,12 +67,45 @@ def add_repository():
             flask.abort(400)
         if 'repo_url' not in flask.request.form:
             flask.abort(400)
-        name = flask.request.form['name']
-        url = flask.request.form['url']
+        name = flask.request.form['repo_name']
+        url = flask.request.form['repo_url']
         inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
                                  app.cfg['mysql']['database'][0])
         inssrv.add_repo(name, url)
-        return flask.redirect('/discover/config/')
+        return flask.redirect('/discover/config/#repos')
+    except Exception, ex:
+        return traceback.format_exc()
+
+@app.route('/discover/repo_edit')
+def edit_repository():
+    try:
+        if 'repo_name' not in flask.request.form:
+            flask.abort(400)
+        if 'repo_url' not in flask.request.form:
+            flask.abort(400)
+        if 'repo_id' not in flask.request.form:
+            flask.abort(400)
+        name = flask.request.form['repo_name']
+        url = flask.request.form['repo_url']
+        id = flask.request.form['repo_id']
+        inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
+                                 app.cfg['mysql']['database'][0])
+        inssrv.update_repo(id, name, url)
+        return flask.redirect('/discover/config/#repos')
+    except Exception, ex:
+        return traceback.format_exc()
+
+@app.route('/discover/repo_delete')
+def delete_repository():
+    try:
+        if 'repo_id' not in flask.request.form:
+            flask.abort(400)
+        id = flask.request.form['repo_id']
+        inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
+                                 app.cfg['mysql']['database'][0])
+        #assert isinstance(id, object)
+        inssrv.delete_repo(id)
+        return flask.redirect('/discover/config/#repos')
     except Exception, ex:
         return traceback.format_exc()
 
@@ -91,6 +124,26 @@ def repo_form():
         incl = flask.render_template('scripts_and_styles.html')
         hdr = flask.render_template('header.html')
         ftr = flask.render_template('footer.html')
-        return flask.render_template('repo_add.html', includes=incl, header=hdr, footer=ftr, name=name, url=url)
+        return flask.render_template('repo_add.html', includes=incl, header=hdr, footer=ftr, name=name, url=url, action="add", id="")
+    except Exception, ex:
+        return traceback.format_exc()
+
+@app.route('/discover/repo_edit_form', methods=['GET'])
+def repo_form():
+    try:
+        id = flask.request.args.get('id')
+        name = ""
+        url = ""
+        if id:
+            inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
+                             app.cfg['mysql']['database'][0])
+            repo = inssrv.get_repo_by_id(id)
+            name = repo['name']
+            url = repo['url']
+            id = repo['id']
+        incl = flask.render_template('scripts_and_styles.html')
+        hdr = flask.render_template('header.html')
+        ftr = flask.render_template('footer.html')
+        return flask.render_template('repo_add.html', includes=incl, header=hdr, footer=ftr, name=name, url=url, action="edit", id=id)
     except Exception, ex:
         return traceback.format_exc()
