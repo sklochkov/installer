@@ -8,6 +8,9 @@ import logging
 import traceback
 CONFIG = "/etc/installer/installer.conf"
 
+#=================
+#= TODO: logging =
+#=================
 
 class InstallerServerApp(flask.Flask):
     def __init__(self, *args, **kwargs):
@@ -55,10 +58,6 @@ def configuration():
         return page
     except Exception, ex:
         return traceback.format_exc()
-
-@app.route('/discover/profiles')
-def profiles_list():
-    return "Not implemented yet"
 
 @app.route('/discover/repo_add', methods=['POST'])
 def add_repository():
@@ -135,18 +134,63 @@ def repo_add_form():
 def repo_edit_form():
     try:
         id = flask.request.args.get('id')
+        if not id:
+            flask.abort(400)
         name = ""
         url = ""
-        if id:
-            inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
+        inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
                              app.cfg['mysql']['database'][0])
-            repo = inssrv.get_repo_by_id(id)
-            name = repo['name']
-            url = repo['url']
-            id = repo['id']
+        repo = inssrv.get_repo_by_id(id)
+        if 'id' not in repo or not repo['id']:
+            return flask.redirect('/discover/config/#repos')
+        name = repo['name']
+        url = repo['url']
+        id = repo['id']
         incl = flask.render_template('scripts_and_styles.html')
         hdr = flask.render_template('header.html')
         ftr = flask.render_template('footer.html')
         return flask.render_template('repo_add.html', includes=incl, header=hdr, footer=ftr, name=name, url=url, action="edit", id=id)
+    except Exception, ex:
+        return traceback.format_exc()
+
+@app.route('/discover/repo_add_form', methods=['GET'])
+def profile_add_form():
+    try:
+        name = flask.request.args.get('name')
+        installer_url = ""
+        network_settings = ""
+        disk_settings = ""
+        packages = ""
+        preinstall = ""
+        postinstall = ""
+        used_repos = []
+        inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
+                             app.cfg['mysql']['database'][0])
+        if name:
+            prof = inssrv.get_profile_by_name(name)
+            if prof['name']:
+                installer_url = prof['installer_url']
+                network_settings = prof['']
+                disk_settings = prof['']
+                packages = prof['packages']
+                preinstall = prof['preinstall']
+                postinstall = prof['postinstall']
+                used_repos = prof['repos']
+        all_repos = inssrv.get_repo_list()
+        i = 0
+        for repo in all_repos:
+            for used_repo in used_repos:
+                if repo['id'] == used_repo['id']:
+                    all_repos[i]['active'] = True
+                    break
+            if 'active' not in all_repos[i]:
+                all_repos[i]['active'] = False
+            i += 1
+        incl = flask.render_template('scripts_and_styles.html')
+        hdr = flask.render_template('header.html')
+        ftr = flask.render_template('footer.html')
+        return flask.render_template('profile_form.html', action="add", name=name, installer_url=installer_url,
+                                     network_settings=network_settings, disk_settings=disk_settings, packages=packages,
+                                     preinstall=preinstall, postinstall=postinstall, repos=all_repos)
     except Exception, ex:
         return traceback.format_exc()

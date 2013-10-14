@@ -69,4 +69,10 @@ class InstallerServer:
         self.ensure_mysql_connection()
         return r.delete_repo_by_id(id, self.mysql_conn)
 
+    def get_profile_by_name(self, name):
+        prof = ProfileManager()
+        self.ensure_mysql_connection()
+        p = prof.get_profile_by_name(name, self.mysql_conn)
+        assert isinstance(p, Profile)
+        return p.to_dict()
 
