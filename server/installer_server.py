@@ -76,3 +76,8 @@ class InstallerServer:
         assert isinstance(p, Profile)
         return p.to_dict()
 
+    def add_profile(self, prof_dict):
+        p = Profile(**prof_dict)
+        prof = ProfileManager()
+        self.ensure_mysql_connection()
+        return prof.add_profile(p, self.mysql_conn)

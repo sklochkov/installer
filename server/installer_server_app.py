@@ -153,7 +153,7 @@ def repo_edit_form():
     except Exception, ex:
         return traceback.format_exc()
 
-@app.route('/discover/repo_add_form', methods=['GET'])
+@app.route('/discover/profile_add_form', methods=['GET'])
 def profile_add_form():
     try:
         name = flask.request.args.get('name')
@@ -191,6 +191,30 @@ def profile_add_form():
         ftr = flask.render_template('footer.html')
         return flask.render_template('profile_form.html', action="add", name=name, installer_url=installer_url,
                                      network_settings=network_settings, disk_settings=disk_settings, packages=packages,
-                                     preinstall=preinstall, postinstall=postinstall, repos=all_repos)
+                                     preinstall=preinstall, postinstall=postinstall, repos=all_repos,
+                                     includes=incl, header=hdr, footer=ftr)
+    except Exception, ex:
+        return traceback.format_exc()
+
+@app.route('/discover/add_profile', methods=['POST'])
+def add_profile():
+    try:
+    #return flask.request.form['repos']
+        prof = {}
+        prof['repos'] = []
+        prof['name'] = flask.request.form['name']
+        repos_raw = flask.request.form.getlist('repos')
+        for id in repos_raw:
+            prof['repos'].append({'id': id})
+        prof['installer_url'] = flask.request.form['installer_url']
+        prof['network_settings'] = flask.request.form['network_settings']
+        prof['disk_settings'] = flask.request.form['disk_settings']
+        prof['packages'] = flask.request.form['packages']
+        prof['preinstall'] = flask.request.form['preinstall']
+        prof['postinstall'] = flask.request.form['postinstall']
+        inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
+                             app.cfg['mysql']['database'][0])
+        inssrv.add_profile(prof)
+        return flask.redirect('/discover/config/#profiles')
     except Exception, ex:
         return traceback.format_exc()

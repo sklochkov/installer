@@ -27,6 +27,14 @@ function check_profile_form() {
 	return false;
 }
 
+$(document).ready(function() {
+        hideHelp();
+});
+
+function hideHelp() {
+        $('#network-help').hide();
+}
+
 </script>
 </head>
 <body>
@@ -34,7 +42,7 @@ function check_profile_form() {
 {{ header }}
 {% endautoescape %}
 <div id="msg"></div>
-<form id="profile_params" method="post" action="/discover/api/{{ action }}_profile" onsubmit="return check_profile_form();">
+<form id="profile_params" method="post" action="/discover/{{ action }}_profile" onsubmit="return check_profile_form();">
 <div id="tabs">
 <ul>
 <li>
@@ -61,21 +69,96 @@ Installer URL<br />
 {% autoescape false %}
 <textarea cols="80" rows="15" id="network_settings" name="network_settings">{{ network_settings }}</textarea>
 {% endautoescape %}
+    <br /><br />
+<a href="#" onclick="$('#network-help').toggle(); return false;">Help -- network configuration</a><br />
+<div id="network-help">
+{% raw %}Format: network --device {{ interface }} --hostname {{ hostname }} --bootproto static --ip={{ ip }} --netmask={{ mask }} --gateway={{ gateway }} --nameserver={{ nameserver }} --onboot=yes --mtu=1500{% endraw %}<br />
+<a href="http://fedoraproject.org/wiki/Anaconda/Kickstart#network">Documentation.</a>
+</div>
 </div>
 <div id="tabs-disk">
 {% autoescape false %}
 <textarea cols="80" rows="15" id="disk_settings" name="disk_settings">{{ disk_settings }}</textarea>
 {% endautoescape %}
+<a href="#" onclick="$('#disk-help').toggle(); return false;">Help -- storage configuration</a><br />
+<div id="disk-help">
+{% raw %}Examples: <br />
+<pre>
+# Physical server with 6 drives
+# SWAP
+part raid.01 --size=16384 --ondisk=sdk
+part raid.02 --size=16384 --ondisk=sdm
+
+# ROOT
+part raid.11 --size=1 --grow --ondisk=sdk
+part raid.12 --size=1 --grow --ondisk=sdm
+
+# WORK
+part raid.21 --size=1  --grow --ondisk=sdl
+part raid.22 --size=1  --grow --ondisk=sdo
+part raid.23 --size=1  --grow --ondisk=sdp
+part raid.24 --size=1  --grow --ondisk=sdq
+
+raid swap --level=1 --device=md0 raid.01 raid.02
+raid / --level=1 --device=md1 raid.11 raid.12
+raid /work --level=10 --device=md2 raid.21 raid.22 raid.23 raid.24
+</pre><br />
+<pre>
+# Simple virtual machine
+part swap --size=2048  --ondisk=vda
+part / --size 1 --grow  --ondisk=vda
+</pre><br />
+<a href="http://fedoraproject.org/wiki/Anaconda/Kickstart#part_or_partition">Documentation on partitions.</a><br />
+<a href="http://fedoraproject.org/wiki/Anaconda/Kickstart#raid">Documentation on software raid.</a><br />
+{% endraw %}
+</div>
 </div>
 <div id="tabs-repo">
 {% for repo in repos %}
-<input type="checkbox" name="repos" checked="{% if repo.active %}checked{% endif %}" value="{{ repo.id }}">&nbsp;[{{ repo.name }}]&nbsp;{{ repo.url }}<br />
+<input type="checkbox" name="repos" {% if repo.active %}checked{% endif %} value="{{ repo.id }}" />&nbsp;[{{ repo.name }}]&nbsp;{{ repo.url }}<br />
 {% endfor %}
 </div>
 <div id="tabs-pkg">
 {% autoescape false %}
 <textarea cols="80" rows="15" id="packages" name="packages">{{ packages }}</textarea>
 {% endautoescape %}
+<a href="#" onclick="$('#packages-help').toggle(); return false;">Help -- network configuration</a><br />
+<div id="packages-help">
+{% raw %}
+Example:<br />
+<pre>
+@base
+@console-internet
+@core
+@debugging
+@directory-client
+@hardware-monitoring
+@large-systems
+@network-file-system-client
+@network-tools
+@performance
+@perl-runtime
+@security-tools
+@server-platform
+@server-policy
+@system-admin-tools
+pax
+oddjob
+sgpio
+certmonger
+pam_krb5
+krb5-workstation
+perl-DBD-SQLite
+vim-common
+vim-enhanced
+telnet
+dstat
+iqbuzz-ssh-keys
+performance-tuner
+</pre>
+<a href="http://fedoraproject.org/wiki/Anaconda/Kickstart#Chapter_3._Package_Selection">Documentation on packages.</a><br />
+{% endraw %}
+</div>
 </div>
 <div id="tabs-scripts">
 {% autoescape false %}
