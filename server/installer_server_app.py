@@ -156,7 +156,7 @@ def repo_edit_form():
 @app.route('/discover/profile_add_form', methods=['GET'])
 def profile_add_form():
     try:
-        name = flask.request.args.get('name')
+        name = flask.request.args.get('name') or ""
         installer_url = ""
         network_settings = ""
         disk_settings = ""
@@ -202,7 +202,7 @@ def add_profile():
     #return flask.request.form['repos']
         prof = {}
         prof['repos'] = []
-        prof['name'] = flask.request.form['name']
+        prof['name'] = flask.request.form['profile_name']
         repos_raw = flask.request.form.getlist('repos')
         for id in repos_raw:
             prof['repos'].append({'id': id})

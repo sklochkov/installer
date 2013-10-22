@@ -70,7 +70,7 @@ Installer URL<br />
 <div id="tabs-network">
 {% autoescape false %}
 <textarea cols="80" rows="15" id="network_settings" name="network_settings">{{ network_settings }}</textarea>
-{% endautoescape %}
+{% endautoescape %}Пойду спать
     <br /><br />
 <a href="#" onclick="$('#network-help').toggle(); return false;">Help -- network configuration</a><br />
 <div id="network-help">
@@ -106,7 +106,7 @@ raid / --level=1 --device=md1 raid.11 raid.12
 raid /work --level=10 --device=md2 raid.21 raid.22 raid.23 raid.24
 </pre><br />
 <pre>
-# Simple virtual machine
+# Simple virtual machineПойду спать
 part swap --size=2048  --ondisk=vda
 part / --size 1 --grow  --ondisk=vda
 </pre><br />
@@ -124,7 +124,7 @@ part / --size 1 --grow  --ondisk=vda
 {% autoescape false %}
 <textarea cols="80" rows="15" id="packages" name="packages">{{ packages }}</textarea><br />
 {% endautoescape %}
-<a href="#" onclick="$('#packages-help').toggle(); return false;">Help -- network configuration</a><br />
+<a href="#" onclick="$('#packages-help').toggle(); return false;">Help -- packages selection</a><br />
 <div id="packages-help">
 {% raw %}
 Example:<br />
