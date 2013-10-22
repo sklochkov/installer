@@ -22,11 +22,15 @@ function edit_profile(name) {
 }
 
 function clone_profile(name) {
-        return true;
+        document.location = "/discover/profile_add_form?name=" + encodeURIComponent(name);
 }
 
 function delete_profile(name) {
         return true;
+}
+
+function add_profile() {
+    document.location = "/discover/profile_add_form";
 }
 
 function edit_repo(id) {
@@ -67,7 +71,7 @@ function add_repo() {
 </li>
 </ul>
 <div id="profiles">
-<div id="add-profile">
+<div id="add-profile">repo
 <input type="button" value="Add new profile" />
 </div>
 <table width="850" cellpadding=2 cellspacing=5>
