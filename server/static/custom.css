@@ -35,3 +35,8 @@
 	border-radius: 3px;
 	background-color: #FFFFFF;
 }
+
+pre {
+        background-color: #FFFFFF;
+        border: 1px #5577AA dashed;
+}
