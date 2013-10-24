@@ -170,8 +170,9 @@ def profile_add_form():
             prof = inssrv.get_profile_by_name(name)
             if prof['name']:
                 installer_url = prof['installer_url']
-                network_settings = prof['']
-                disk_settings = prof['']
+                id = prof['id']
+                network_settings = prof['network_settings']
+                disk_settings = prof['disk_settings']
                 packages = prof['packages']
                 preinstall = prof['preinstall']
                 postinstall = prof['postinstall']
@@ -189,7 +190,44 @@ def profile_add_form():
         incl = flask.render_template('scripts_and_styles.html')
         hdr = flask.render_template('header.html')
         ftr = flask.render_template('footer.html')
-        return flask.render_template('profile_form.html', action="add", name=name, installer_url=installer_url,
+        return flask.render_template('profile_form.html', action="add", id=id, name=name, installer_url=installer_url,
+                                     network_settings=network_settings, disk_settings=disk_settings, packages=packages,
+                                     preinstall=preinstall, postinstall=postinstall, repos=all_repos,
+                                     includes=incl, header=hdr, footer=ftr)
+    except Exception, ex:
+        return traceback.format_exc()
+
+@app.route('/discover/profile_edit_form', methods=['GET'])
+def profile_edit_form():
+    try:
+        name = flask.request.args.get('name') or ""
+        if not name:
+            return flask.redirect('/discover/config/#profiles')
+        inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
+                             app.cfg['mysql']['database'][0])
+        prof = inssrv.get_profile_by_name(name)
+        installer_url = prof['installer_url']
+        id = prof['id']
+        network_settings = prof['network_settings']
+        disk_settings = prof['disk_settings']
+        packages = prof['packages']
+        preinstall = prof['preinstall']
+        postinstall = prof['postinstall']
+        used_repos = prof['repos']
+        all_repos = inssrv.get_repo_list()
+        i = 0
+        for repo in all_repos:
+            for used_repo in used_repos:
+                if repo['id'] == used_repo['id']:
+                    all_repos[i]['active'] = True
+                    break
+            if 'active' not in all_repos[i]:
+                all_repos[i]['active'] = False
+            i += 1
+        incl = flask.render_template('scripts_and_styles.html')
+        hdr = flask.render_template('header.html')
+        ftr = flask.render_template('footer.html')
+        return flask.render_template('profile_form.html', action="edit", id=id, name=name, installer_url=installer_url,
                                      network_settings=network_settings, disk_settings=disk_settings, packages=packages,
                                      preinstall=preinstall, postinstall=postinstall, repos=all_repos,
                                      includes=incl, header=hdr, footer=ftr)
@@ -203,6 +241,7 @@ def add_profile():
         prof = {}
         prof['repos'] = []
         prof['name'] = flask.request.form['profile_name']
+        prof['id'] = flask.request.form['profile_id']
         repos_raw = flask.request.form.getlist('repos')
         for id in repos_raw:
             prof['repos'].append({'id': id})
@@ -215,6 +254,30 @@ def add_profile():
         inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
                              app.cfg['mysql']['database'][0])
         inssrv.add_profile(prof)
+        return flask.redirect('/discover/config/#profiles')
+    except Exception, ex:
+        return traceback.format_exc()
+
+@app.route('/discover/edit_profile', methods=['POST'])
+def edit_profile():
+    try:
+    #return flask.request.form['repos']
+        prof = {}
+        prof['repos'] = []
+        prof['name'] = flask.request.form['profile_name']
+        prof['id'] = flask.request.form['profile_id']
+        repos_raw = flask.request.form.getlist('repos')
+        for id in repos_raw:
+            prof['repos'].append({'id': id})
+        prof['installer_url'] = flask.request.form['installer_url']
+        prof['network_settings'] = flask.request.form['network_settings']
+        prof['disk_settings'] = flask.request.form['disk_settings']
+        prof['packages'] = flask.request.form['packages']
+        prof['preinstall'] = flask.request.form['preinstall']
+        prof['postinstall'] = flask.request.form['postinstall']
+        inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
+                             app.cfg['mysql']['database'][0])
+        inssrv.update_profile(prof)
         return flask.redirect('/discover/config/#profiles')
     except Exception, ex:
         return traceback.format_exc()

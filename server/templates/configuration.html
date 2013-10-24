@@ -14,19 +14,19 @@ Installer configuration
 
 <script>
 $(function() {
-        $( "#tabs" ).tabs();
+    $( "#tabs" ).tabs();
 });
 
 function edit_profile(name) {
-	return true;
+	document.location = "/discover/profile_edit_form?name=" + encodeURIComponent(name);
 }
 
 function clone_profile(name) {
-        document.location = "/discover/profile_add_form?name=" + encodeURIComponent(name);
+    document.location = "/discover/profile_add_form?name=" + encodeURIComponent(name);
 }
 
 function delete_profile(name) {
-        return true;
+    return true;
 }
 
 function add_profile() {

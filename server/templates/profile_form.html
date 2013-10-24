@@ -45,6 +45,7 @@ function hideHelp() {
 {% endautoescape %}
 <div id="msg"></div>
 <form id="profile_params" method="post" action="/discover/{{ action }}_profile" onsubmit="return check_profile_form();">
+<input type="hidden" name="profile_id" id="profile_id" value="{{ id }}" />
 <div id="tabs">
 <ul>
 <li>

@@ -81,3 +81,9 @@ class InstallerServer:
         prof = ProfileManager()
         self.ensure_mysql_connection()
         return prof.add_profile(p, self.mysql_conn)
+
+    def update_profile(self, prof_dict):
+        p = Profile(**prof_dict)
+        prof = ProfileManager()
+        self.ensure_mysql_connection()
+        return prof.update_profile(p, self.mysql_conn)
