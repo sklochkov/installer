@@ -97,7 +97,6 @@ class ProfileManager:
             raise InternalException("Error while processing profile parameters: %s" % str(ex))
         try:
             c.execute(PROFILE_GET_REPOSITORIES_QUERY, (name,))
-            //res = c.fetchmany()
         except Exception, ex:
             #c.close()
             raise DatabaseException("Error while trying to retrieve profile %s: %s" % (name, ex))
