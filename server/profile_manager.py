@@ -97,18 +97,18 @@ class ProfileManager:
             raise InternalException("Error while processing profile parameters: %s" % str(ex))
         try:
             c.execute(PROFILE_GET_REPOSITORIES_QUERY, (name,))
-            res = c.fetchmany()
-            c.close()
+            //res = c.fetchmany()
         except Exception, ex:
             #c.close()
             raise DatabaseException("Error while trying to retrieve profile %s: %s" % (name, ex))
         try:
-            for repo in res:
+            for repo in c:
                 params['repos'].append({
                     'name': repo[1],
                     'url': repo[2],
                     'id': repo[3]
                 })
+            c.close()
         except Exception, ex:
             raise InternalException("Error while processing profile repository parameters: %s" % str(ex))
         try:
@@ -183,7 +183,7 @@ class ProfileManager:
         PARAMS = ["installer_url", "network_settings", "disk_settings", "packages", "preinstall", "postinstall"]
         for param in PARAMS:
             try:
-                c.execute(PROFILE_PARAM_UPDATE_QUERY, profile.id, param, prof[param])
+                c.execute(PROFILE_PARAM_UPDATE_QUERY, (prof[param], profile.id, param))
             except Exception, ex:
                 conn.rollback()
                 raise DatabaseException("Error while trying to update parameter %s of profile %s: %s" % (param, profile.name, ex))
