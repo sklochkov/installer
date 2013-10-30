@@ -71,7 +71,7 @@ class ProfileManager:
         try:
             c = conn.cursor()
             c.execute(PROFILE_GET_QUERY, (name,))
-            res = c.fetchmany()
+            #res = c.fetchmany()
         except Exception, ex:
             c.close()
             raise DatabaseException("Error while trying to retrieve profile %s: %s" % (name, ex))
@@ -87,7 +87,7 @@ class ProfileManager:
                 'name': "",
                 'id': None
             }
-            for param in res:
+            for param in c:
                 if param[2] in params:
                     params[param[2]] = param[3]
             params['name'] = param[1]
