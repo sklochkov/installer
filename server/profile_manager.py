@@ -117,17 +117,17 @@ class ProfileManager:
         except Exception, ex:
             raise InternalException("Error while creating profile object: %s" % str(ex))
 
-        def profile_exists(self, name, conn):
-            try:
-                c = conn.cursor()
-                c.execute(PROFILE_ID_BY_NAME_QUERY, (name,))
-                res = c.fetchone()
-                c.close()
-                if res == None:
-                    return False
-                return True
-            except Exception, ex:
-                raise DatabaseException("Error while trying to check profile %s existence: %s" % (name, ex))
+    def profile_exists(self, name, conn):
+        try:
+            c = conn.cursor()
+            c.execute(PROFILE_ID_BY_NAME_QUERY, (name,))
+            res = c.fetchone()
+            c.close()
+            if not res:
+                return False
+            return True
+        except Exception, ex:
+            raise DatabaseException("Error while trying to check profile %s existence: %s" % (name, ex))
 
 
     def add_profile(self, profile, conn):
