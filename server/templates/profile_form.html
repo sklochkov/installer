@@ -71,11 +71,11 @@ Installer URL<br />
 <div id="tabs-network">
 {% autoescape false %}
 <textarea cols="80" rows="15" id="network_settings" name="network_settings">{{ network_settings }}</textarea>
-{% endautoescape %}Пойду спать
+{% endautoescape %}
     <br /><br />
 <a href="#" onclick="$('#network-help').toggle(); return false;">Help -- network configuration</a><br />
 <div id="network-help">
-{% raw %}Format: network --device {{ interface }} --hostname {{ hostname }} --bootproto static --ip={{ ip }} --netmask={{ mask }} --gateway={{ gateway }} --nameserver={{ nameserver }} --onboot=yes --mtu=1500{% endraw %}<br />
+<pre>{% raw %}Format: network --device {{ interface }} --hostname {{ hostname }} --bootproto static --ip={{ ip }} --netmask={{ mask }} --gateway={{ gateway }} --nameserver={{ nameserver }} --onboot=yes --mtu=1500{% endraw %}</pre><br />
 <a href="http://fedoraproject.org/wiki/Anaconda/Kickstart#network">Documentation.</a>
 </div>
 </div>
