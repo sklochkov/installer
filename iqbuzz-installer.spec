@@ -5,7 +5,7 @@
 
 Name:		iqbuzz-installer-modules
 Version:	0.1
-Release:	27
+Release:	28
 
 Summary:	IQBuzz installer master package
 License:	Proprietary
