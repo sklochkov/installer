@@ -5,7 +5,7 @@
 
 Name:		iqbuzz-installer-modules
 Version:	0.1
-Release:	26
+Release:	27
 
 Summary:	IQBuzz installer master package
 License:	Proprietary
@@ -84,6 +84,10 @@ install -m644 static/images/ui-bg_gloss-wave_35_f6a828_500x100.png %{buildroot}/
 install -m644 static/images/ui-bg_glass_100_f6f6f6_1x400.png %{buildroot}/work/installer/html/static/images/ui-bg_glass_100_f6f6f6_1x400.png
 install -m644 static/images/animated-overlay.gif %{buildroot}/work/installer/html/static/images/animated-overlay.gif
 install -m644 static/custom.css %{buildroot}/work/installer/html/static/custom.css
+
+# This is not an error, this scripts are downloaded from server and executed on the client
+install -m644 bootstrapper.sh %{buildroot}/work/installer/html/static/bootstrapper.sh
+install -m644 discover.py %{buildroot}/work/installer/html/static/discover.py
 
 install -m644 templates/header.html %{buildroot}/work/installer/app/templates/header.html
 install -m644 templates/profile_list.html %{buildroot}/work/installer/app/templates/profile_list.html
