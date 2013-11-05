@@ -281,3 +281,27 @@ def edit_profile():
         return flask.redirect('/discover/config/#profiles')
     except Exception, ex:
         return traceback.format_exc()
+
+@app.route('/discover/api/check', methods=['GET'])
+def api_check():
+    return "Don't do it, dudley"
+
+"""
+{
+        'mac': mac,
+        'ifaces': ifaces,
+        'cpu': cpu,
+        'mem': mem,
+        'disks': disks
+}
+"""
+
+@app.route('/discover/api/info', methods=['POST'])
+def api_info():
+    if 'info' not in flask.request.form:
+        flask.abort(400)
+    info_raw = flask.request.form['info']
+    try:
+        info = json.loads(info_raw)
+    except:
+        flask.abort(400)
