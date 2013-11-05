@@ -10,18 +10,24 @@ CREATE TABLE `servers` (
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ENGINE innodb;
 
+CREATE TABLE `server_info` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`server_id` int(11) NOT NULL,
+	`name` varchar(100),
+	`value` text,
+	PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ENGINE innodb;
+
 CREATE TABLE `server_parameters` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`server_id` int(11) NOT NULL,
 	`name` varchar(100),
-	`type` int(11) NOT NULL,
-	`number` int(11) DEFAULT 0,
-	`value` varchar(200),
+	`value` text,
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ENGINE innodb;
 
 CREATE TABLE `profiles` (
-        `id` int(11) NOT NULL AUTO_INCREMENT,
+    `id` int(11) NOT NULL AUTO_INCREMENT,
 	`name` varchar(150),
 	`status` int(11) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`),
