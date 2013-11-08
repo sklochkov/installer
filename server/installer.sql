@@ -7,14 +7,17 @@ CREATE TABLE `servers` (
 	`hostname` varchar(200) DEFAULT '',
 	`status` int(11) NOT NULL DEFAULT 0,
 	`profile_id` int(11) DEFAULT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	UNIQUE KEY (`mac`),
+	UNIQUE KEY (`name`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ENGINE innodb;
 
-CREATE TABLE `server_info` (
+CREATE TABLE `server_interfaces` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`server_id` int(11) NOT NULL,
 	`name` varchar(100),
-	`value` text,
+	`status` varchar(100),
+	`mac` varchar(100),
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ENGINE innodb;
 
@@ -24,6 +27,14 @@ CREATE TABLE `server_parameters` (
 	`name` varchar(100),
 	`value` text,
 	PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ENGINE innodb;
+
+CREATE TABLE `servers_repositories` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`server_id` int(11) NOT NULL,
+	`repo_id` int(11) NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE KEY (`server_id`, `repo_id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ENGINE innodb;
 
 CREATE TABLE `profiles` (
