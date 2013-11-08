@@ -15,6 +15,8 @@ PROFILE_NAME_UPDATE_QUERY = """update `profiles` set `name` = %s where `id` = %s
 PROFILE_PARAM_UPDATE_QUERY = """update `profile_parameters` set `value` = %s where `profile_id` = %s and `name` = %s"""
 
 PROFILE_GET_QUERY = """select `profiles`.`id` as `prof_id`, `profiles`.`name` as `prof_name`, `profile_parameters`.`name` as `param.name`, `profile_parameters`.`value` as `param_value` from `profiles`, `profile_parameters` where `profiles`.`name` = %s and `profiles`.`id` = `profile_parameters`.`profile_id`"""
+PROFILE_GET_BY_ID_QUERY = """select `profiles`.`id` as `prof_id`, `profiles`.`name` as `prof_name`, `profile_parameters`.`name` as `param.name`, `profile_parameters`.`value` as `param_value` from `profiles`, `profile_parameters` where `profiles`.`id` = %s and `profiles`.`id` = `profile_parameters`.`profile_id`"""
+
 PROFILE_GET_REPOSITORIES_QUERY = """select `profiles`.`name` as `prof_name`, `repositories`.`name` as `repo_name`, `repositories`.`url` as `repo_url`, `repositories`.`id` as `repo_id` from `profiles`, `repositories`, `profiles_repositories` where `profiles`.`name` = %s and `profiles`.`id` = `profiles_repositories`.`profile_id` and `repositories`.`id` = `profiles_repositories`.`repo_id`"""
 
 PROFILE_ID_BY_NAME_QUERY = """select `id` from `profiles` where `name` = %s"""
@@ -39,6 +41,7 @@ class Profile:
         self.preinstall = preinstall
         self.postinstall = postinstall
 
+    # DEPRECATED and buggy. Use Server's to_kickstart() instead
     def to_kickstart(self):
         env = Environment(loader=PackageLoader('pattern', 'templates'))
         tmpl = env.get_template('kickstart.cfg')
@@ -68,9 +71,20 @@ class ProfileManager:
         pass
 
     def get_profile_by_name(self, name, conn):
+        return self._get_profile('name', name, conn)
+
+    def get_profile_by_id(self, id, conn):
+        return self._get_profile('id', id, conn)
+
+    def _get_profile(self, field, value, conn):
         try:
             c = conn.cursor()
-            c.execute(PROFILE_GET_QUERY, (name,))
+            if field == 'name':
+                c.execute(PROFILE_GET_QUERY, (value,))
+            elif field == 'id':
+                c.execute(PROFILE_GET_BY_ID_QUERY, (value,))
+            else:
+                raise InternalException('Cannot get profile by %s' % field)
             #res = c.fetchmany()
         except Exception, ex:
             c.close()
