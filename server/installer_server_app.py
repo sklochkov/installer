@@ -164,6 +164,7 @@ def profile_add_form():
         preinstall = ""
         postinstall = ""
         used_repos = []
+        id = ""
         inssrv = InstallerServer(app.cfg['mysql']['host'][0], app.cfg['mysql']['user'][0], app.cfg['mysql']['password'][0],
                              app.cfg['mysql']['database'][0])
         if name:
