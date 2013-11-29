@@ -1,0 +1,8 @@
+default menu.c32
+timeout 30
+MENU TITLE PXE Menu
+
+LABEL {{ hostname }}
+        MENU LABEL {{ hostname }}
+        KERNEL images.6/vmlinuz
+        append initrd=images.6/initrd.img linux panic=10 ks={{ baseurl }}/{{ hostname }}.cfg ksdevice={{ interface }}  vga=0x311
