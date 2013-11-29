@@ -3,9 +3,9 @@
 %define _specdir	.
 %define _rpmdir		.
 
-Name:		iqbuzz-installer-modules
+Name:		installer-modules
 Version:	0.1
-Release:	28
+Release:	29
 
 Summary:	IQBuzz installer master package
 License:	Proprietary
