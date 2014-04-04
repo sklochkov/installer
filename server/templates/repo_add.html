@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+Discover — {{ action }} repository
+</title>
+{% autoescape false %}
+{{ includes }}
+{% endautoescape %}
+<script>
+
+function check_profile_form() {
+	var msg = "";
+	if ($('#repo_name').val() == "") msg = msg + "Repository name cannot be empty!<br />"
+	if ($('#repo_url').val() == "") msg = msg + "Repository URL cannot be empty!<br />"
+	if (msg == "")
+		return true;
+	else {
+		$('#msg').html(msg);
+	}
+	return false;
+}
+
+</script>
+</head>
+<body>
+{% autoescape false %}
+{{ header }}
+{% endautoescape %}
+<div id="lst" style="width: 800px;">
+<div id="msg"></div>
+<form id="repo_params" method="post" action="/discover/repo_{{ action }}" onsubmit="return check_profile_form();">
+<input type="hidden" name="repo_id" value="{{ id }}">
+<table cellpadding="2" cellspacing="5">
+<tr>
+<td>
+Repository name
+</td>
+<td>
+<input style="width: 600px" id="repo_name" name="repo_name" value="{{ name }}" />
+</td>
+</tr>
+<tr>
+<td>
+Repository URL<br />
+</td>
+<td>
+<input style="width: 600px" id="repo_url" name="repo_url" value="{{ url }}" />
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<input type="submit" value="Add repository" />
+</td>
+</tr>
+</table>
+</form>
+</div>
+{% autoescape false %}
+{{ footer }}
+{% endautoescape %}
+</body>
+</html>
